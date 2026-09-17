@@ -19,7 +19,7 @@ const drops = Array.from({ length: cols }, () => ({
 setInterval(() => {
   ctx.fillStyle = "rgba(0,0,0,0.12)"
   ctx.fillRect(0, 0, canvas.width, canvas.height)
-  ctx.fillStyle = "#c084fc"
+  ctx.fillStyle = "#4ade80"
   ctx.font = fontSize + "px monospace"
   drops.forEach((drop, i) => {
     const ch = chars[Math.floor(Math.random() * chars.length)]
