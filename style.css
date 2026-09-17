@@ -1,0 +1,361 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: "Trispace", sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+#matrix-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.cursor-particle {
+  position: fixed;
+  pointer-events: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #dcfce7 0%, #22c55e 45%, transparent 75%);
+  box-shadow:
+    0 0 18px rgba(34, 197, 94, 0.95),
+    0 0 35px rgba(34, 197, 94, 0.7),
+    0 0 60px rgba(34, 197, 94, 0.5);
+  animation: sparkle 1.1s ease-out forwards;
+  z-index: 9999;
+}
+
+@keyframes sparkle {
+  to {
+    transform: scale(0) translate(var(--dx), var(--dy));
+    opacity: 0;
+  }
+}
+
+#click-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: all 0.5s;
+  cursor: pointer;
+  z-index: 2000;
+  font-family: "Trispace", sans-serif;
+  text-align: center;
+  color: #22c55e;
+  text-shadow:
+    0 0 15px #16a34a,
+    0 0 25px #4ade80,
+    0 0 35px rgba(255, 255, 255, 0.4);
+}
+
+#click-overlay.fade-out {
+  opacity: 0;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+.main-page {
+  display: none;
+  opacity: 0;
+  padding: 80px 20px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.main-page.show {
+  display: block;
+  animation: mainEnter 1.2s ease forwards;
+}
+
+@keyframes mainEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.background-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 3.2rem;
+  margin-bottom: 50px;
+  background: linear-gradient(135deg, #22c55e, #4ade80, #bbf7d0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 0 10px;
+}
+
+/* ===== MAIN PROFILE CARD ===== */
+.profile-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.main-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 35px 30px;
+  background: rgba(15, 30, 20, 0.55);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  text-align: center;
+  transform-style: preserve-3d;
+  transition: all 0.25s ease;
+  will-change: transform;
+}
+
+.main-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow:
+    0 30px 70px rgba(34, 197, 94, 0.45),
+    0 0 70px rgba(34, 197, 94, 0.35);
+}
+
+.profile-pic {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #22c55e;
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+}
+
+.profile-pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-name {
+  font-size: 1.9rem;
+  margin-bottom: 6px;
+  text-shadow:
+    1px 1px 0 #16a34a,
+    2px 2px 0 #15803d,
+    3px 3px 6px rgba(34, 197, 94, 0.8),
+    0 0 12px rgba(34, 197, 94, 0.9);
+}
+
+.friend-username {
+  color: #4ade80;
+  margin-bottom: 18px;
+  font-size: 1.05rem;
+}
+
+.friend-description {
+  line-height: 1.65;
+  font-weight: 500;
+  font-size: 0.95rem;
+  background: linear-gradient(
+    90deg,
+    #14532d,
+    #16a34a,
+    #ffffff,
+    #16a34a,
+    #14532d
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.friend-description a {
+  color: #4ade80 !important;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.friend-description a:hover {
+  text-decoration: underline;
+}
+
+/* ===== GALLERY ===== */
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, #4ade80, #bbf7d0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gallery-container {
+  max-width: 1100px;
+  margin: 0 auto 50px;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(200px, 240px));
+  gap: 22px;
+  justify-content: center;
+}
+
+.gallery-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: rgba(15, 30, 20, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.gallery-item:hover {
+  transform: scale(1.04) translateY(-6px);
+  box-shadow:
+    0 20px 50px rgba(34, 197, 94, 0.4),
+    0 0 40px rgba(34, 197, 94, 0.3);
+  border-color: rgba(34, 197, 94, 0.7);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.08);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: 30px 20px 10px;
+  color: #22c55e;
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .main-page {
+    padding: 60px 12px 40px;
+  }
+  .page-title {
+    font-size: 2.2rem;
+    margin-bottom: 35px;
+  }
+  .main-card {
+    max-width: 100%;
+    padding: 28px 20px;
+  }
+  .profile-pic {
+    width: 140px;
+    height: 140px;
+  }
+  .friend-name {
+    font-size: 1.5rem;
+  }
+  .section-title {
+    font-size: 1.6rem;
+  }
+  .gallery-grid {
+    grid-template-columns: repeat(3, minmax(140px, 180px));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(140px, 180px));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.8rem;
+  }
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+  }
+  .friend-name {
+    font-size: 1.35rem;
+  }
+  .friend-description {
+    font-size: 0.85rem;
+  }
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 10px;
+  }
+}
+
+/* ===== TEXT GRADIENT ANIMATIONS ===== */
+@keyframes textGradientMove1 {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes textGradientMove2 {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+@keyframes textGradientMove3 {
+  0% { background-position: 50% 0; }
+  100% { background-position: 250% 0; }
+}
+
+/* ===== LIGHTBOX ===== */
+#lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  cursor: zoom-out;
+}
+
+#lightbox.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#lightbox img {
+  max-width: 92vw;
+  max-height: 88vh;
+  border-radius: 12px;
+  border: 2px solid rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 60px rgba(34, 197, 94, 0.4);
+  object-fit: contain;
+}
